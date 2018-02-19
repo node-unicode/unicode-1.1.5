@@ -1,1 +1,1 @@
-module.exports=/[\./\u2007]/
+module.exports=/[\.\/\u2007]/
