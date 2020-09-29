@@ -1,0 +1,1 @@
+module.exports=/[ \xA0\u2000-\u200B\u3000\uFEFF]/
