@@ -1,4 +1,4 @@
-# Unicode v1.1.5 data
+# Unicode v1.1.5 data [![@unicode/unicode-1.1.5 on npm](https://img.shields.io/npm/v/@unicode/unicode-1.1.5)](https://www.npmjs.com/package/@unicode/unicode-1.1.5)
 
 JavaScript-compatible Unicode data for use in Node.js. Included: arrays of code points, arrays of symbols, and regular expressions for Unicode v1.1.5’s categories, scripts, script extensions, blocks, and properties, as well as bidi mirroring and case folding data.
 
