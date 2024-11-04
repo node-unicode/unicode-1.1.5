@@ -233,6 +233,20 @@ require('@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/regex.js');
 require('@unicode/unicode-1.1.5/Bidi_Class/White_Space/code-points.js');
 require('@unicode/unicode-1.1.5/Bidi_Class/White_Space/symbols.js');
 require('@unicode/unicode-1.1.5/Bidi_Class/White_Space/regex.js');
+
+// `Simple_Case_Mapping`:
+
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/code-points.js');
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/symbols.js');
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/regex.js');
+
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/code-points.js');
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/symbols.js');
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/regex.js');
+
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/code-points.js');
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/symbols.js');
+require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/regex.js');
 ```
 
 ## Author
