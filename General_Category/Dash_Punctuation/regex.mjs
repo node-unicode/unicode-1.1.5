@@ -1,0 +1,1 @@
+export default /[\x2D\u2010-\u2015\u207B\u208B\u301C\u3030]/;

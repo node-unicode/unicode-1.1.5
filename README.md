@@ -17,10 +17,12 @@ npm install @unicode/unicode-1.1.5 --save-dev
 The Unicode data modules ship with pre-compiled regular expressions for categories, scripts, script extensions, blocks, and properties. But maybe you want to create a single regular expression that combines several categories, scripts, etc. In that case, [***you should use Regenerate***](https://mths.be/regenerate). For example, to construct a regex that matches all symbols in the Arabic and Greek scripts as per Unicode v6.3.0:
 
 ```js
-const regenerate = require('regenerate');
+import regenerate from 'regenerate';
+import arabic from '@unicode/unicode-6.3.0/Script_Extensions/Arabic/code-points.mjs'; // Or `…/symbols`, doesn’t matter.
+import greek from '@unicode/unicode-6.3.0/Script_Extensions/Greek/code-points.mjs'; // Or `…/symbols`, doesn’t matter.
 const set = regenerate()
-  .add(require('@unicode/unicode-6.3.0/Script_Extensions/Arabic/code-points.js')) // or `…/symbols`, doesn’t matter
-  .add(require('@unicode/unicode-6.3.0/Script_Extensions/Greek/code-points.js')); // or `…/symbols`, doesn’t matter
+  .add(arabic)
+  .add(greek);
 console.log(set.toString());
 // Then you might want to use a template like this to write the result to a file, along with any regex flags you might need:
 // const regex = /<%= set.toString() %>/gim;
@@ -30,20 +32,21 @@ console.log(set.toString());
 
 ```js
 // Get an array of code points in a given Unicode category:
-const codePoints = require('@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/code-points.js');
+import uppercaseLetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/code-points.mjs';
 // Get an array of symbols (strings) in a given Unicode category:
-const symbols = require('@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/symbols.js');
+import uppercaseLetterSymbols from '@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/symbols.mjs';
 // Get a regular expression that matches any symbol in a given Unicode category:
-const regex = require('@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/regex.js');
+import uppercaseLetterRegex from '@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/regex.mjs';
 // Get the canonical category a given code point belongs to:
 // (Note: U+0041 is LATIN CAPITAL LETTER A)
-const category = require('@unicode/unicode-1.1.5/General_Category').get(0x41);
+import generalCategory from '@unicode/unicode-1.1.5/General_Category/index.mjs';
+const category = generalCategory.get(0x41);
 // Get an array of all code points with a given bidi class:
-const on = require('@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/code-points.js');
+import otherNeutralCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/code-points.mjs';
 // Get a map from code points to bidi classes:
-const bidiClassMap = require('@unicode/unicode-1.1.5/Bidi_Class');
+import bidiClassMap from '@unicode/unicode-1.1.5/Bidi_Class/index.mjs';
 // Get the directionality of a given code point:
-const directionality = require('@unicode/unicode-1.1.5/Bidi_Class').get(0x41);
+const directionality = bidiClassMap.get(0x41);
 
 // …you get the idea.
 ```
@@ -53,203 +56,197 @@ Other than categories, data on Unicode properties, blocks, scripts, and script e
 ```js
 // `Names`:
 
-require('@unicode/unicode-1.1.5/Names/index.js'); // array of canonical names
+import names from '@unicode/unicode-1.1.5/Names/index.mjs'; // Array of canonical names.
 
 
 // `Binary_Property`:
 
-require('@unicode/unicode-1.1.5/Binary_Property/ASCII/code-points.js');
-require('@unicode/unicode-1.1.5/Binary_Property/ASCII/symbols.js');
-require('@unicode/unicode-1.1.5/Binary_Property/ASCII/regex.js');
+import ASCIICodePoints from '@unicode/unicode-1.1.5/Binary_Property/ASCII/code-points.mjs';
+import ASCIISymbols from '@unicode/unicode-1.1.5/Binary_Property/ASCII/symbols.mjs';
+import ASCIIRegex from '@unicode/unicode-1.1.5/Binary_Property/ASCII/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Binary_Property/Any/code-points.js');
-require('@unicode/unicode-1.1.5/Binary_Property/Any/symbols.js');
-require('@unicode/unicode-1.1.5/Binary_Property/Any/regex.js');
+import AnyCodePoints from '@unicode/unicode-1.1.5/Binary_Property/Any/code-points.mjs';
+import AnySymbols from '@unicode/unicode-1.1.5/Binary_Property/Any/symbols.mjs';
+import AnyRegex from '@unicode/unicode-1.1.5/Binary_Property/Any/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Binary_Property/Assigned/code-points.js');
-require('@unicode/unicode-1.1.5/Binary_Property/Assigned/symbols.js');
-require('@unicode/unicode-1.1.5/Binary_Property/Assigned/regex.js');
+import AssignedCodePoints from '@unicode/unicode-1.1.5/Binary_Property/Assigned/code-points.mjs';
+import AssignedSymbols from '@unicode/unicode-1.1.5/Binary_Property/Assigned/symbols.mjs';
+import AssignedRegex from '@unicode/unicode-1.1.5/Binary_Property/Assigned/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Binary_Property/Bidi_Mirrored/code-points.js');
-require('@unicode/unicode-1.1.5/Binary_Property/Bidi_Mirrored/symbols.js');
-require('@unicode/unicode-1.1.5/Binary_Property/Bidi_Mirrored/regex.js');
+import Bidi_MirroredCodePoints from '@unicode/unicode-1.1.5/Binary_Property/Bidi_Mirrored/code-points.mjs';
+import Bidi_MirroredSymbols from '@unicode/unicode-1.1.5/Binary_Property/Bidi_Mirrored/symbols.mjs';
+import Bidi_MirroredRegex from '@unicode/unicode-1.1.5/Binary_Property/Bidi_Mirrored/regex.mjs';
 
 // `General_Category`:
 
-require('@unicode/unicode-1.1.5/General_Category').get(codePoint); // lookup map
+import General_Category from '@unicode/unicode-1.1.5/General_Category/index.mjs'; // Lookup map.
 
-require('@unicode/unicode-1.1.5/General_Category/Cased_Letter/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Cased_Letter/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Cased_Letter/regex.js');
+import Cased_LetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Cased_Letter/code-points.mjs';
+import Cased_LetterSymbols from '@unicode/unicode-1.1.5/General_Category/Cased_Letter/symbols.mjs';
+import Cased_LetterRegex from '@unicode/unicode-1.1.5/General_Category/Cased_Letter/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Close_Punctuation/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Close_Punctuation/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Close_Punctuation/regex.js');
+import Close_PunctuationCodePoints from '@unicode/unicode-1.1.5/General_Category/Close_Punctuation/code-points.mjs';
+import Close_PunctuationSymbols from '@unicode/unicode-1.1.5/General_Category/Close_Punctuation/symbols.mjs';
+import Close_PunctuationRegex from '@unicode/unicode-1.1.5/General_Category/Close_Punctuation/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Control/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Control/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Control/regex.js');
+import ControlCodePoints from '@unicode/unicode-1.1.5/General_Category/Control/code-points.mjs';
+import ControlSymbols from '@unicode/unicode-1.1.5/General_Category/Control/symbols.mjs';
+import ControlRegex from '@unicode/unicode-1.1.5/General_Category/Control/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Currency_Symbol/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Currency_Symbol/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Currency_Symbol/regex.js');
+import Currency_SymbolCodePoints from '@unicode/unicode-1.1.5/General_Category/Currency_Symbol/code-points.mjs';
+import Currency_SymbolSymbols from '@unicode/unicode-1.1.5/General_Category/Currency_Symbol/symbols.mjs';
+import Currency_SymbolRegex from '@unicode/unicode-1.1.5/General_Category/Currency_Symbol/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Dash_Punctuation/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Dash_Punctuation/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Dash_Punctuation/regex.js');
+import Dash_PunctuationCodePoints from '@unicode/unicode-1.1.5/General_Category/Dash_Punctuation/code-points.mjs';
+import Dash_PunctuationSymbols from '@unicode/unicode-1.1.5/General_Category/Dash_Punctuation/symbols.mjs';
+import Dash_PunctuationRegex from '@unicode/unicode-1.1.5/General_Category/Dash_Punctuation/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Decimal_Number/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Decimal_Number/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Decimal_Number/regex.js');
+import Decimal_NumberCodePoints from '@unicode/unicode-1.1.5/General_Category/Decimal_Number/code-points.mjs';
+import Decimal_NumberSymbols from '@unicode/unicode-1.1.5/General_Category/Decimal_Number/symbols.mjs';
+import Decimal_NumberRegex from '@unicode/unicode-1.1.5/General_Category/Decimal_Number/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Letter/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Letter/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Letter/regex.js');
+import LetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Letter/code-points.mjs';
+import LetterSymbols from '@unicode/unicode-1.1.5/General_Category/Letter/symbols.mjs';
+import LetterRegex from '@unicode/unicode-1.1.5/General_Category/Letter/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Line_Separator/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Line_Separator/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Line_Separator/regex.js');
+import Line_SeparatorCodePoints from '@unicode/unicode-1.1.5/General_Category/Line_Separator/code-points.mjs';
+import Line_SeparatorSymbols from '@unicode/unicode-1.1.5/General_Category/Line_Separator/symbols.mjs';
+import Line_SeparatorRegex from '@unicode/unicode-1.1.5/General_Category/Line_Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Lowercase_Letter/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Lowercase_Letter/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Lowercase_Letter/regex.js');
+import Lowercase_LetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Lowercase_Letter/code-points.mjs';
+import Lowercase_LetterSymbols from '@unicode/unicode-1.1.5/General_Category/Lowercase_Letter/symbols.mjs';
+import Lowercase_LetterRegex from '@unicode/unicode-1.1.5/General_Category/Lowercase_Letter/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Mark/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Mark/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Mark/regex.js');
+import MarkCodePoints from '@unicode/unicode-1.1.5/General_Category/Mark/code-points.mjs';
+import MarkSymbols from '@unicode/unicode-1.1.5/General_Category/Mark/symbols.mjs';
+import MarkRegex from '@unicode/unicode-1.1.5/General_Category/Mark/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Math_Symbol/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Math_Symbol/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Math_Symbol/regex.js');
+import Math_SymbolCodePoints from '@unicode/unicode-1.1.5/General_Category/Math_Symbol/code-points.mjs';
+import Math_SymbolSymbols from '@unicode/unicode-1.1.5/General_Category/Math_Symbol/symbols.mjs';
+import Math_SymbolRegex from '@unicode/unicode-1.1.5/General_Category/Math_Symbol/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Modifier_Letter/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Modifier_Letter/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Modifier_Letter/regex.js');
+import Modifier_LetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Modifier_Letter/code-points.mjs';
+import Modifier_LetterSymbols from '@unicode/unicode-1.1.5/General_Category/Modifier_Letter/symbols.mjs';
+import Modifier_LetterRegex from '@unicode/unicode-1.1.5/General_Category/Modifier_Letter/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Nonspacing_Mark/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Nonspacing_Mark/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Nonspacing_Mark/regex.js');
+import Nonspacing_MarkCodePoints from '@unicode/unicode-1.1.5/General_Category/Nonspacing_Mark/code-points.mjs';
+import Nonspacing_MarkSymbols from '@unicode/unicode-1.1.5/General_Category/Nonspacing_Mark/symbols.mjs';
+import Nonspacing_MarkRegex from '@unicode/unicode-1.1.5/General_Category/Nonspacing_Mark/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Number/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Number/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Number/regex.js');
+import NumberCodePoints from '@unicode/unicode-1.1.5/General_Category/Number/code-points.mjs';
+import NumberSymbols from '@unicode/unicode-1.1.5/General_Category/Number/symbols.mjs';
+import NumberRegex from '@unicode/unicode-1.1.5/General_Category/Number/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Open_Punctuation/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Open_Punctuation/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Open_Punctuation/regex.js');
+import Open_PunctuationCodePoints from '@unicode/unicode-1.1.5/General_Category/Open_Punctuation/code-points.mjs';
+import Open_PunctuationSymbols from '@unicode/unicode-1.1.5/General_Category/Open_Punctuation/symbols.mjs';
+import Open_PunctuationRegex from '@unicode/unicode-1.1.5/General_Category/Open_Punctuation/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Other/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Other/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Other/regex.js');
+import OtherCodePoints from '@unicode/unicode-1.1.5/General_Category/Other/code-points.mjs';
+import OtherSymbols from '@unicode/unicode-1.1.5/General_Category/Other/symbols.mjs';
+import OtherRegex from '@unicode/unicode-1.1.5/General_Category/Other/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Other_Letter/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Letter/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Letter/regex.js');
+import Other_LetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Other_Letter/code-points.mjs';
+import Other_LetterSymbols from '@unicode/unicode-1.1.5/General_Category/Other_Letter/symbols.mjs';
+import Other_LetterRegex from '@unicode/unicode-1.1.5/General_Category/Other_Letter/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Other_Number/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Number/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Number/regex.js');
+import Other_NumberCodePoints from '@unicode/unicode-1.1.5/General_Category/Other_Number/code-points.mjs';
+import Other_NumberSymbols from '@unicode/unicode-1.1.5/General_Category/Other_Number/symbols.mjs';
+import Other_NumberRegex from '@unicode/unicode-1.1.5/General_Category/Other_Number/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Other_Punctuation/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Punctuation/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Punctuation/regex.js');
+import Other_PunctuationCodePoints from '@unicode/unicode-1.1.5/General_Category/Other_Punctuation/code-points.mjs';
+import Other_PunctuationSymbols from '@unicode/unicode-1.1.5/General_Category/Other_Punctuation/symbols.mjs';
+import Other_PunctuationRegex from '@unicode/unicode-1.1.5/General_Category/Other_Punctuation/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Other_Symbol/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Symbol/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Other_Symbol/regex.js');
+import Other_SymbolCodePoints from '@unicode/unicode-1.1.5/General_Category/Other_Symbol/code-points.mjs';
+import Other_SymbolSymbols from '@unicode/unicode-1.1.5/General_Category/Other_Symbol/symbols.mjs';
+import Other_SymbolRegex from '@unicode/unicode-1.1.5/General_Category/Other_Symbol/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Paragraph_Separator/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Paragraph_Separator/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Paragraph_Separator/regex.js');
+import Paragraph_SeparatorCodePoints from '@unicode/unicode-1.1.5/General_Category/Paragraph_Separator/code-points.mjs';
+import Paragraph_SeparatorSymbols from '@unicode/unicode-1.1.5/General_Category/Paragraph_Separator/symbols.mjs';
+import Paragraph_SeparatorRegex from '@unicode/unicode-1.1.5/General_Category/Paragraph_Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Punctuation/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Punctuation/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Punctuation/regex.js');
+import PunctuationCodePoints from '@unicode/unicode-1.1.5/General_Category/Punctuation/code-points.mjs';
+import PunctuationSymbols from '@unicode/unicode-1.1.5/General_Category/Punctuation/symbols.mjs';
+import PunctuationRegex from '@unicode/unicode-1.1.5/General_Category/Punctuation/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Separator/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Separator/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Separator/regex.js');
+import SeparatorCodePoints from '@unicode/unicode-1.1.5/General_Category/Separator/code-points.mjs';
+import SeparatorSymbols from '@unicode/unicode-1.1.5/General_Category/Separator/symbols.mjs';
+import SeparatorRegex from '@unicode/unicode-1.1.5/General_Category/Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Space_Separator/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Space_Separator/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Space_Separator/regex.js');
+import Space_SeparatorCodePoints from '@unicode/unicode-1.1.5/General_Category/Space_Separator/code-points.mjs';
+import Space_SeparatorSymbols from '@unicode/unicode-1.1.5/General_Category/Space_Separator/symbols.mjs';
+import Space_SeparatorRegex from '@unicode/unicode-1.1.5/General_Category/Space_Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Spacing_Mark/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Spacing_Mark/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Spacing_Mark/regex.js');
+import Spacing_MarkCodePoints from '@unicode/unicode-1.1.5/General_Category/Spacing_Mark/code-points.mjs';
+import Spacing_MarkSymbols from '@unicode/unicode-1.1.5/General_Category/Spacing_Mark/symbols.mjs';
+import Spacing_MarkRegex from '@unicode/unicode-1.1.5/General_Category/Spacing_Mark/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Symbol/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Symbol/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Symbol/regex.js');
+import SymbolCodePoints from '@unicode/unicode-1.1.5/General_Category/Symbol/code-points.mjs';
+import SymbolSymbols from '@unicode/unicode-1.1.5/General_Category/Symbol/symbols.mjs';
+import SymbolRegex from '@unicode/unicode-1.1.5/General_Category/Symbol/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Unassigned/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Unassigned/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Unassigned/regex.js');
+import UnassignedCodePoints from '@unicode/unicode-1.1.5/General_Category/Unassigned/code-points.mjs';
+import UnassignedSymbols from '@unicode/unicode-1.1.5/General_Category/Unassigned/symbols.mjs';
+import UnassignedRegex from '@unicode/unicode-1.1.5/General_Category/Unassigned/regex.mjs';
 
-require('@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/code-points.js');
-require('@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/symbols.js');
-require('@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/regex.js');
+import Uppercase_LetterCodePoints from '@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/code-points.mjs';
+import Uppercase_LetterSymbols from '@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/symbols.mjs';
+import Uppercase_LetterRegex from '@unicode/unicode-1.1.5/General_Category/Uppercase_Letter/regex.mjs';
 
 // `Bidi_Class`:
 
-require('@unicode/unicode-1.1.5/Bidi_Class').get(codePoint); // lookup map
+import Bidi_Class from '@unicode/unicode-1.1.5/Bidi_Class/index.mjs'; // Lookup map.
 
-require('@unicode/unicode-1.1.5/Bidi_Class/Arabic_Number/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Arabic_Number/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Arabic_Number/regex.js');
+import Arabic_NumberCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Arabic_Number/code-points.mjs';
+import Arabic_NumberSymbols from '@unicode/unicode-1.1.5/Bidi_Class/Arabic_Number/symbols.mjs';
+import Arabic_NumberRegex from '@unicode/unicode-1.1.5/Bidi_Class/Arabic_Number/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/Common_Separator/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Common_Separator/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Common_Separator/regex.js');
+import Common_SeparatorCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Common_Separator/code-points.mjs';
+import Common_SeparatorSymbols from '@unicode/unicode-1.1.5/Bidi_Class/Common_Separator/symbols.mjs';
+import Common_SeparatorRegex from '@unicode/unicode-1.1.5/Bidi_Class/Common_Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Number/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Number/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Number/regex.js');
+import European_NumberCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/European_Number/code-points.mjs';
+import European_NumberSymbols from '@unicode/unicode-1.1.5/Bidi_Class/European_Number/symbols.mjs';
+import European_NumberRegex from '@unicode/unicode-1.1.5/Bidi_Class/European_Number/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Separator/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Separator/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Separator/regex.js');
+import European_SeparatorCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/European_Separator/code-points.mjs';
+import European_SeparatorSymbols from '@unicode/unicode-1.1.5/Bidi_Class/European_Separator/symbols.mjs';
+import European_SeparatorRegex from '@unicode/unicode-1.1.5/Bidi_Class/European_Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Terminator/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Terminator/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/European_Terminator/regex.js');
+import European_TerminatorCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/European_Terminator/code-points.mjs';
+import European_TerminatorSymbols from '@unicode/unicode-1.1.5/Bidi_Class/European_Terminator/symbols.mjs';
+import European_TerminatorRegex from '@unicode/unicode-1.1.5/Bidi_Class/European_Terminator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/Left_To_Right/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Left_To_Right/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Left_To_Right/regex.js');
+import Left_To_RightCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Left_To_Right/code-points.mjs';
+import Left_To_RightSymbols from '@unicode/unicode-1.1.5/Bidi_Class/Left_To_Right/symbols.mjs';
+import Left_To_RightRegex from '@unicode/unicode-1.1.5/Bidi_Class/Left_To_Right/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/regex.js');
+import Other_NeutralCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/code-points.mjs';
+import Other_NeutralSymbols from '@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/symbols.mjs';
+import Other_NeutralRegex from '@unicode/unicode-1.1.5/Bidi_Class/Other_Neutral/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/Paragraph_Separator/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Paragraph_Separator/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Paragraph_Separator/regex.js');
+import Paragraph_SeparatorCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Paragraph_Separator/code-points.mjs';
+import Paragraph_SeparatorSymbols from '@unicode/unicode-1.1.5/Bidi_Class/Paragraph_Separator/symbols.mjs';
+import Paragraph_SeparatorRegex from '@unicode/unicode-1.1.5/Bidi_Class/Paragraph_Separator/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/regex.js');
+import Right_To_LeftCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/code-points.mjs';
+import Right_To_LeftSymbols from '@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/symbols.mjs';
+import Right_To_LeftRegex from '@unicode/unicode-1.1.5/Bidi_Class/Right_To_Left/regex.mjs';
 
-require('@unicode/unicode-1.1.5/Bidi_Class/White_Space/code-points.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/White_Space/symbols.js');
-require('@unicode/unicode-1.1.5/Bidi_Class/White_Space/regex.js');
+import White_SpaceCodePoints from '@unicode/unicode-1.1.5/Bidi_Class/White_Space/code-points.mjs';
+import White_SpaceSymbols from '@unicode/unicode-1.1.5/Bidi_Class/White_Space/symbols.mjs';
+import White_SpaceRegex from '@unicode/unicode-1.1.5/Bidi_Class/White_Space/regex.mjs';
 
 // `Simple_Case_Mapping`:
 
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/code-points.js'); // lookup map from code point to code point or array of code points
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/code-points.js').get(codePoint);
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/symbols.js'); // lookup map from symbol to symbol(s)
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/symbols.js').get(symbol);
+import LowercaseCodePoints from '@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/code-points.mjs'; // Lookup map from code point to code point or array of code points.
+import LowercaseSymbols from '@unicode/unicode-1.1.5/Simple_Case_Mapping/Lowercase/symbols.mjs'; // Lookup map from symbol to symbol(s).
 
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/code-points.js'); // lookup map from code point to code point or array of code points
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/code-points.js').get(codePoint);
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/symbols.js'); // lookup map from symbol to symbol(s)
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/symbols.js').get(symbol);
+import TitlecaseCodePoints from '@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/code-points.mjs'; // Lookup map from code point to code point or array of code points.
+import TitlecaseSymbols from '@unicode/unicode-1.1.5/Simple_Case_Mapping/Titlecase/symbols.mjs'; // Lookup map from symbol to symbol(s).
 
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/code-points.js'); // lookup map from code point to code point or array of code points
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/code-points.js').get(codePoint);
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/symbols.js'); // lookup map from symbol to symbol(s)
-require('@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/symbols.js').get(symbol);
+import UppercaseCodePoints from '@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/code-points.mjs'; // Lookup map from code point to code point or array of code points.
+import UppercaseSymbols from '@unicode/unicode-1.1.5/Simple_Case_Mapping/Uppercase/symbols.mjs'; // Lookup map from symbol to symbol(s).
 ```
 
 ## Author
