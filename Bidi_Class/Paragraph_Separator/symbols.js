@@ -1,1 +1,0 @@
-module.exports=['\u2028','\u2029']
